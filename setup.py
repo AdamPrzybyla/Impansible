@@ -8,7 +8,7 @@ setup(
   author = 'Adam Przybyla',
   author_email = 'adam.przybyla@gmail.com',
   url = 'https://github.com/user/reponame',
-  download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',
+  download_url = 'https://github.com/AdamPrzybyla/Impansible/archive/v_01.tar.gz',
   keywords = ['robotframework', 'ansible', 'automatisation'],
   install_requires=[
           'ansible',
