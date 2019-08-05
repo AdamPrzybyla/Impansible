@@ -40,7 +40,7 @@ test impossible
     should contain  ${x}   agare
 
 test impossible with parameter
-    ${x}=  Vmware Host Facts  hostname=10.91.28.98
+    ${x}=  Vmware Host Facts  hostname=2.3.4.5
     ${x}=  Get From Dictionary  ${x}  ansible_facts
     ${x}=  Get From Dictionary  ${x}  ansible_hostname
     should contain  ${x}   menas
