@@ -7,7 +7,7 @@ setup(
   description = 'Robotframework library to access all ansible internal modules.',
   author = 'Adam Przybyla',
   author_email = 'adam.przybyla@gmail.com',
-  url = 'https://github.com/AdamPrzybyla/impansible'
+  url = 'https://github.com/AdamPrzybyla/impansible',
   download_url = 'https://github.com/AdamPrzybyla/Impansible/archive/v_02.tar.gz',
   keywords = ['robotframework', 'ansible', 'automatisation'],
   install_requires=[
