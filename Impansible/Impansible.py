@@ -12,6 +12,7 @@ amodules_map={}
 r=os.path.dirname(modules.__file__)
 rr=len(r)-15
 del modules
+results={}
 for i in os.walk(r):
 	mo=[m[:-3] for m in i[2] if m[-2:]=='py' and m!='__init__.py']
 	for m in mo: amodules_map[m]=i[0][rr:].replace('/','.')
@@ -56,8 +57,8 @@ class Impansible(object):
 	def nitz2(self,**e):
 		return BuiltIn().get_variables()
 
-	def picker(self,*p):
-		return picker2(self._status,p)
+	def picker(self,w,*p):
+		return picker2(w,p)
 
 if __name__ == '__main__':
 	x=Impansible()

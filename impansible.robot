@@ -4,7 +4,7 @@ library  Collections
 
 *** variables ***
 ${MYGLOB}		OK
-${hostname}		1.2.3.4
+${hostname}		ubu
 ${password}		passwod
 ${datacenter}		vc01
 ${username}		root
@@ -34,51 +34,48 @@ test possible
     should be equal  ${x}   OK
 
 test impossible
-    ${x}=  Vmware Host Facts
+    ${x}=  vmware host facts  ${hostname}  hostname=h1 password=pas username=root validate_certs=no esxi_hostname=dmnode
     ${x}=  Get From Dictionary  ${x}  ansible_facts
     ${x}=  Get From Dictionary  ${x}  ansible_hostname
-    should contain  ${x}   agare
-
-test impossible with parameter
-    ${x}=  Vmware Host Facts  hostname=2.3.4.5
-    ${x}=  Get From Dictionary  ${x}  ansible_facts
-    ${x}=  Get From Dictionary  ${x}  ansible_hostname
-    should contain  ${x}   menas
+    should contain  ${x}   node
 
 test ping
-    ${x}=  ping
+    ${x}=  Ping  ${hostname}
     ${x}=  Get From Dictionary  ${x}  ping
     should be equal  ${x}   pong
 
-test ping bang
-    ${x}=  Ping  data=Bang!
-    ${x}=  Get From Dictionary  ${x}  ping
-    should be equal  ${x}   Bang!
-
-test ping with suite variables
-    Set My Ping Setup
-    ${x}=  Ping
-    ${x}=  Get From Dictionary  ${x}  ping
-    should be equal  ${x}   Pif!
-
 test python 
-    ${x}=  Python Requirements Facts
+    ${x}=  Python Requirements Info  ${hostname}
     ${x}=  Get From Dictionary  ${x}  python_version
-    ${y}=  Evaluate  sys.version  modules=sys
-    should be equal  ${x}   ${y}
+    should contain  ${x}   GCC
 
 test python and picker
-    ${x}=  Python Requirements Facts
-    ${x}=  Picker  python_version
-    ${y}=  Evaluate  sys.version  modules=sys
-    should be equal  ${x}   ${y}
-
-test xml
-    ${x}=  Xml  path=bar.xml  xpath=/business/beers/beer  count=yes
-    ${x}=  Get From Dictionary  ${x}  count
-    should be equal  ${x}   ${3}
+    ${x}=  Python Requirements Info  ${hostname}
+    ${x}=  Picker  ${x}  python_version
+    should contain  ${x}   GCC
 
 
-*** Keywords ***
-Set My Ping Setup
-    set suite variable   ${data}   Pif!
+test 1
+	${x}=	Setup  ${hostname}
+	${y}=	get from dictionary  ${x}   ansible_facts
+	${h}=	get from dictionary  ${y}   ansible_hostname
+	${z}=	get from dictionary  ${y}   ansible_distribution
+	Should be Equal  ${z}  Ubuntu
+	Should Contain   ${h}  tester
+test 2
+	${x}=	apt    ${hostname}   package=mtr   state=present
+        ${x}=	get from dictionary  ${x}   invocation
+        ${y}=	get from dictionary  ${x}   module_args
+        ${s}=	get from dictionary  ${y}   state
+        Should be Equal  ${s}  present
+test 3
+	${x}=	apt   ${hostname}   package=mtr   state=absent
+        ${x}=	get from dictionary  ${x}   invocation
+        ${y}=	get from dictionary  ${x}   module_args
+        ${s}=	get from dictionary  ${y}   state
+        Should be Equal  ${s}  absent
+
+test 4
+	${c}=	get certificate   ${hostname}  host=www.google.com   port=443  proxy_host=10.1.1.1
+	${e}=	get from dictionary  ${c}   expired
+	Should not be True   ${e}
