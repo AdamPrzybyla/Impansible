@@ -36,6 +36,11 @@ class genImpansible3(type):
 		args1=[u'ansible',u'-u',u'root',u'all',u'--inventory=%s,'%p[1],
 			u'-m',p[0]]
 		if p[2:]: args1+=[u'-a',u" ".join(p[2:])]
+		try:
+			pa = BuiltIn().get_variable_value("${ansible_password}")
+		except:
+			pa=False
+		if pa: args1+=[u'-e',u"ansible_password=%s"%pa]
 		results_callback = ResultCallback()
 		cli = mycli2(args1,results_callback)
 		exit_code = cli.run()
@@ -43,8 +48,6 @@ class genImpansible3(type):
 
 	def __call__(self, *args, **kwargs):
 		cls = type.__call__(self, *args)
-		#[setattr(cls,n,(lambda n: lambda *p7,**p8: 
-		#self.call_impansible(n,*p7,**p8))(n)) for n in amodules_map.keys()]
 		[setattr(cls,n,(lambda n: lambda *p7: 
 		self.call_impansible(n,*p7))(n)) for n in amodules_map.keys()]
 		return cls
@@ -57,5 +60,5 @@ class Impansible3(object,metaclass=genImpansible3):
 	def nitz2(self,**e):
 		return BuiltIn().get_variables()
 
-	def picker(self,*p):
-		return picker2(self._status,p)
+	def picker(self,w,*p):
+		return picker2(w,p)
