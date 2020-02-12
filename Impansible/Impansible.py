@@ -49,7 +49,7 @@ class Impansible(object):
 			pa = BuiltIn().get_variable_value("${ansible_password}")
 		except:
 			pa=False
-		if pa: args1+=[u'-e',u"ansible_password=%s"%pa]
+		if pa: args+=[u'-e',u"ansible_password=%s"%pa]
 		results_callback = ResultCallback()
 		cli = mycli2(args,results_callback)
 		exit_code = cli.run()
