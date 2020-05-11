@@ -8,6 +8,9 @@ from .picker2 import picker2
 from ansible.cli.adhoc import AdHocCLI as mycli
 from ansible.plugins.callback import CallbackBase
 from ansible import context
+ansible_password=False
+ansible_become_password=False
+ansible_user=False
 amodules_map={}
 r=os.path.dirname(modules.__file__)
 rr=len(r)-15
@@ -39,16 +42,33 @@ class genImpansible(type):
 			
 class Impansible(object):
 	__metaclass__ = genImpansible
-	#def call_impansible(self,*p,**p2):
 	def call_impansible(self,*p):
 		global results
+		global ansible_password
+		global ansible_user
+		global ansible_become_password
 		args=[u'ansible', u'-u', u'root',u'all', 
 			u'--inventory=%s,' % p[1], u'-m', p[0]]
 		if p[2:]: args+=[u'-a',u" ".join(p[2:])]
 		try:
 			pa = BuiltIn().get_variable_value("${ansible_password}")
 		except:
-			pa=False
+			pa=ansible_password
+		if ansible_become_password:
+			args+=["-e","ansible_become=yes","-e",
+				"ansible_become_password=%s" % ansible_become_password,
+				"-e", "ansible_user=%s" % ansible_user]
+		else:
+			try:
+				bpa = BuiltIn().get_variable_value("${ansible_become_password}")
+				buz = BuiltIn().get_variable_value("${ansible_user}")
+				if bpa:
+					args+=["-e","ansible_become=yes","-e",
+					"ansible_become_password=%s" % bpa,
+					"-e", "ansible_user=%s" % buz]
+					if not pa: pa=bpa
+			except:
+				pass
 		if pa: args+=[u'-e',u"ansible_password=%s"%pa]
 		results_callback = ResultCallback()
 		cli = mycli2(args,results_callback)
@@ -64,6 +84,9 @@ class Impansible(object):
 
 	def picker(self,w,*p):
 		return picker2(w,p)
+
+	def set_internals(self,n,v):
+		globals()[n]=v
 
 if __name__ == '__main__':
 	x=Impansible()
