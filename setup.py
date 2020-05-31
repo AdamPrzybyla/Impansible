@@ -9,7 +9,7 @@ setup(
   author_email = 'adam.przybyla@gmail.com',
   url = 'https://github.com/AdamPrzybyla/impansible',
   download_url = 'https://github.com/AdamPrzybyla/Impansible/archive/v_06.tar.gz',
-  keywords = ['robotframework', 'ansible', 'automatisation'],
+  keywords = ['robotframework', 'ansible', 'automatisation','nsm'],
   install_requires=[
           'ansible',
           'robotframework',
