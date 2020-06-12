@@ -47,29 +47,36 @@ class Impansible(object):
 		global ansible_password
 		global ansible_user
 		global ansible_become_password
-		args=[u'ansible', u'-u', u'root',u'all', 
-			u'--inventory=%s,' % p[1], u'-m', p[0]]
+		if p[1].lower()=='local':
+			myh="localhost"
+		else:
+			myh=p[1]
+		args=[u'ansible', u'-u', u'root',u'all', u'--inventory=%s,' % myh, u'-m', p[0]]
 		if p[2:]: args+=[u'-a',u" ".join(p[2:])]
-		try:
-			pa = BuiltIn().get_variable_value("${ansible_password}")
-		except:
-			pa=ansible_password
-		if ansible_become_password:
-			args+=["-e","ansible_become=yes","-e",
-				"ansible_become_password=%s" % ansible_become_password,
-				"-e", "ansible_user=%s" % ansible_user]
+		if p[1].lower()=='local':
+			args+=["-c","local"]
 		else:
 			try:
-				bpa = BuiltIn().get_variable_value("${ansible_become_password}")
-				buz = BuiltIn().get_variable_value("${ansible_user}")
-				if bpa:
-					args+=["-e","ansible_become=yes","-e",
-					"ansible_become_password=%s" % bpa,
-					"-e", "ansible_user=%s" % buz]
-					if not pa: pa=bpa
+				pa = BuiltIn().get_variable_value("${ansible_password}")
 			except:
-				pass
-		if pa: args+=[u'-e',u"ansible_password=%s"%pa]
+				pa=ansible_password
+		
+			if ansible_become_password:
+				args+=["-e","ansible_become=yes","-e",
+					"ansible_become_password=%s" % ansible_become_password,
+					"-e", "ansible_user=%s" % ansible_user]
+			else:
+				try:
+					bpa = BuiltIn().get_variable_value("${ansible_become_password}")
+					buz = BuiltIn().get_variable_value("${ansible_user}")
+					if bpa:
+						args+=["-e","ansible_become=yes","-e",
+						"ansible_become_password=%s" % bpa,
+						"-e", "ansible_user=%s" % buz]
+						if not pa: pa=bpa
+				except:
+					pass
+			if pa: args+=[u'-e',u"ansible_password=%s"%pa]
 		results_callback = ResultCallback()
 		cli = mycli2(args,results_callback)
 		exit_code = cli.run()
