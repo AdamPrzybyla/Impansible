@@ -20,6 +20,7 @@ r=os.path.dirname(modules.__file__)
 rr=len(r)-15
 del modules
 results={}
+resultser={}
 for i in os.walk(r):
 	mo=[m[:-3] for m in i[2] if m[-2:]=='py' and m!='__init__.py']
 	for m in mo: amodules_map[m]=i[0][rr:].replace('/','.')
@@ -34,7 +35,21 @@ class mycli2(mycli):
 class ResultCallback(CallbackBase):
     def v2_runner_on_ok(self, result, **kwargs):
 	global results
+        global resultser
+        resultser=False
 	results = result._result
+
+    def v2_runner_on_failed(self, result, ignore_errors=False):
+        global results
+        global resultser
+        resultser=True
+        results = result._result
+
+    def v2_runner_on_unreachable(self, result):
+        global results
+        global resultser
+        results = result._result
+        resultser=True
 
 class genImpansible(type):
 	def __init__(cls, name, bases, nmspc):
@@ -315,9 +330,11 @@ class Impansible(object):
 	__metaclass__ = genImpansible
 	def call_impansible(self,*p):
 		global results
+		global resultser
 		global ansible_password
 		global ansible_user
 		global ansible_become_password
+		resultser=False
 		if p[1].lower()=='local':
 			myh="localhost"
 		else:
@@ -351,6 +368,8 @@ class Impansible(object):
 		results_callback = ResultCallback()
 		cli = mycli2(args,results_callback)
 		exit_code = cli.run()
+		if resultser:
+			raise RuntimeError("%s" % results["msg"])
 		return results
 
 	def nitz(self):
