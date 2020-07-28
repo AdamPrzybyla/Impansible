@@ -1,14 +1,19 @@
 from distutils.core import setup
+from os.path import abspath, dirname, join
+CURDIR = dirname(abspath(__file__))
+with open(join(CURDIR, 'README.rst')) as f:
+    DESCRIPTION = f.read()
 setup(
   name = 'robotframework-impansible',
   packages = ['Impansible'],
-  version = '0.7',
+  version = '0.8',
   license='MIT',
   description = 'Robotframework library to access all ansible internal modules.',
+  long_description=DESCRIPTION,
   author = 'Adam Przybyla',
   author_email = 'adam.przybyla@gmail.com',
   url = 'https://github.com/AdamPrzybyla/impansible',
-  download_url = 'https://github.com/AdamPrzybyla/Impansible/archive/v_07.tar.gz',
+  download_url = 'https://github.com/AdamPrzybyla/Impansible/archive/v_08.tar.gz',
   keywords = ['robotframework', 'ansible', 'automatisation','nsm'],
   install_requires=[
           'ansible',
