@@ -6,7 +6,7 @@ Impansible
 Introduction
 ------------
 
-Impoansible_ is a `Robot Framework`_ test
+Impansible_ is a `Robot Framework`_ test
 library for access to all Ansible internal modules.
 All Ansible modules are available as Robotframework's keywords.
 The Impansible library can be used without Robotframework.
@@ -127,7 +127,10 @@ available:
 - `robotframework-users`_ mailing list
 
 .. _Impansible: https://github.com/AdamPrzybyla/Impansible
+.. _github: https://github.com/AdamPrzybyla/Impansible
 .. _Robot Framework: http://robotframework.org
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-test-libraries
 .. _PyPI: https://pypi.python.org/pypi/robotframework-impansible
 .. _keyword Documentation: https://adamprzybyla.github.io/robotframework-Impansible.html
+.. _pip: http://pip-installer.org
+.. _robotframework-users: http://groups.google.com/group/robotframework-users

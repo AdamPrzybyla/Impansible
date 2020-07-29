@@ -2,8 +2,8 @@
 setup.cfg
 setup.py
 Impansible/Impansible.py
-Impansible/docs.py
 Impansible/Impansible3.py
 Impansible/__init__.py
 Impansible/__main__.py
+Impansible/docs.py
 Impansible/picker2.py
