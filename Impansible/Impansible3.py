@@ -368,7 +368,7 @@ class Impansible3(object,metaclass=genImpansible3):
 ```
 	"""
 
-	ROBOT_LIBRARY_VERSION = '0.10'
+	ROBOT_LIBRARY_VERSION = '0.11'
 
 	def nitz(self):
 		w = BuiltIn().get_variable_value("${MYGLOB}")

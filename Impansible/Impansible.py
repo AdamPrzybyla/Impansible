@@ -325,7 +325,7 @@ class Impansible(object):
 ```
 	"""
 
-	ROBOT_LIBRARY_VERSION = '0.10'
+	ROBOT_LIBRARY_VERSION = '0.11'
 
 	__metaclass__ = genImpansible
 	def call_impansible(self,*p):
